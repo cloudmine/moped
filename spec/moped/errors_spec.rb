@@ -79,6 +79,21 @@ describe Moped::Errors::MongoError do
       end
     end
 
+    context "when 'err' contains not master" do
+
+      let(:details) do
+        { "errmsg" => "not master or secondary; cannot currently read from this replSet member" }
+      end
+
+      let(:error) do
+        Moped::Errors::PotentialReconfiguration.new({}, details)
+      end
+
+      it "returns true" do
+        error.should be_reconfiguring_replica_set
+      end
+    end
+
     context "when errors are not matching not master" do
 
       let(:details) do
