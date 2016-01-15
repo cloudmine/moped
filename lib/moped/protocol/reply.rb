@@ -108,7 +108,12 @@ module Moped
       # @since 1.2.10
       def unauthorized?
         result = documents[0]
-        result["code"] == UNAUTHORIZED || result["assertionCode"] == UNAUTHORIZED
+        return false if result.nil?
+        
+        err = error_message(result)
+        UNAUTHORIZED.include?(result["code"]) ||
+          UNAUTHORIZED.include?(result["assertionCode"]) ||
+          (err && (err =~ /unauthorized/ || err =~ /not authorized/))
       end
 
       class << self
@@ -143,6 +148,9 @@ module Moped
         end
 
         @documents = documents
+      end
+      def error_message(result)
+        result["err"] || result["errmsg"] || result["$err"]
       end
 
     end
