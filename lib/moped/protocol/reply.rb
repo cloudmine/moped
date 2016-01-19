@@ -13,7 +13,7 @@ module Moped
     class Reply
       include Message
 
-      UNAUTHORIZED = 10057
+      UNAUTHORIZED = [10057, 16550]
 
       # @attribute
       # @return [Number] the length of the message
